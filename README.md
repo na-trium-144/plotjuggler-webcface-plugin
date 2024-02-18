@@ -30,6 +30,7 @@ where the executable `plotjuggler`is located.
 Alternatively, there is a number of additional folders which will be
 used to load plugins. Check **App->Preferences...** in PlotJuggler to learn more.
 
+<!--
 ## Note for ROS users
 
 The provide **CMakeLists.txt** should find the necessary dependencies even
@@ -40,3 +41,4 @@ support the development of ROS specific plugins.
 
 You can find those in the repository
 [PlotJuggler/plotjuggler-ros-plugins](https://github.com/PlotJuggler/plotjuggler-ros-plugins)
+-->
