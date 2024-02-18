@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.12)
 
-project(plotjuggler_sample_plugins)
+project(plotjuggler_webcface_plugin)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #-------  Include Qt dependencies -------
@@ -46,7 +46,7 @@ if( CATKIN_DEVEL_PREFIX OR catkin_FOUND OR CATKIN_BUILD_BINARY_PACKAGE)
         CATKIN_DEPENDS plotjuggler
         )
     include_directories(${catkin_INCLUDE_DIRS})
-    list(APPEND ${PJ_LIBRARIES} ${catkin_LIBRARIES} )
+    list(APPEND PJ_LIBRARIES ${catkin_LIBRARIES} )
     set(PJ_PLUGIN_INSTALL_DIRECTORY ${CATKIN_PACKAGE_BIN_DESTINATION} )
 
     #--------------------------------------------------------
@@ -71,38 +71,30 @@ else()
     message(STATUS "plotjuggler_LIBRARIES: ${plotjuggler_LIBRARIES}")
 
     include_directories(${plotjuggler_INCLUDE_DIR})
-    list(APPEND ${PJ_LIBRARIES} ${plotjuggler_LIBRARIES} )
+    list(APPEND PJ_LIBRARIES ${plotjuggler_LIBRARIES} )
     set(PJ_PLUGIN_INSTALL_DIRECTORY bin )
 
 endif()
 
+find_package(webcface CONFIG REQUIRED)
+
 #------- Create the libraries -------
 
-add_library(PlotJugglerStreamSample SHARED
-    DataStreamSample/datastream_sample.h
-    DataStreamSample/datastream_sample.cpp )
+add_library(PlotJugglerStreamWebCFace SHARED src/streamer.cpp)
 
-target_link_libraries(PlotJugglerStreamSample
-    ${PJ_LIBRARIES})
-
-
-add_library(PlotJugglerDataSample SHARED
-   DataLoadSampleCSV/dataload_simple_csv.h
-   DataLoadSampleCSV/dataload_simple_csv.cpp )
-
-target_link_libraries(PlotJugglerDataSample
-    ${PJ_LIBRARIES})
+target_link_libraries(PlotJugglerStreamWebCFace
+    ${PJ_LIBRARIES}
+    webcface::webcface
+)
 
 if (COMPILING_WITH_AMENT)
-    ament_target_dependencies(PlotJugglerStreamSample plotjuggler)
-    ament_target_dependencies(PlotJugglerDataSample plotjuggler)
+    ament_target_dependencies(PlotJugglerStreamWebCFace plotjuggler)
 endif()
 #------- Install the libraries -------
 
 install(
     TARGETS
-        PlotJugglerStreamSample
-        PlotJugglerDataSample
+        PlotJugglerStreamWebCFace
     DESTINATION
         ${PJ_PLUGIN_INSTALL_DIRECTORY}  )
 
