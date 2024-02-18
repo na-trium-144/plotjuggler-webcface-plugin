@@ -2,13 +2,17 @@
 
 [PlotJuggler](https://github.com/facontidavide/PlotJuggler) plugin for [WebCFace](https://github.com/na-trium-144/webcface).
 
-## Build
+[plotjuggler-sample-plugins](https://github.com/PlotJuggler/plotjuggler-sample-plugins) をもとに作っています
 
-To build any plugin, PlotJuggler must be installed in your system.
+## WebCFaceのインストール
 
-For instance, in Linux, you should perform a full compilation and installation:
+WebCFaceのREADMEにしたがってインストールしてください
 
-```
+## PlotJugglerのインストール
+
+PlotJugglerのREADMEにしたがってaptで入れるか、以下のようにソースからビルドしてください
+```sh
+sudo apt install qtbase5-dev libqt5svg5-dev libqt5websockets5-dev libqt5x11extras5-dev
 git clone --recurse-submodules https://github.com/facontidavide/PlotJuggler.git
 cd PlotJuggler
 mkdir build; cd build
@@ -17,28 +21,16 @@ make -j
 sudo make install
 ```
 
-Look at the [CMakeLists.txt](CMakeLists.txt) file to learn how to
-find **Qt** and PlotJuggler.
+## プラグインのインストール
 
-## Plugin installation
+```sh
+git clone https://github.com/na-trium-144/plotjuggler-webcface-plugin
+cd plotjuggler-webcface-plugin
+cmake -Bbuild
+make -Cbuild
+sudo make -Cbuild install
+```
 
-Remember that PlotJugglers need to find the plugin files at startup.
-
-The best way to do that is to install/copy the plugin in the same folder
-where the executable `plotjuggler`is located.
-
-Alternatively, there is a number of additional folders which will be
-used to load plugins. Check **App->Preferences...** in PlotJuggler to learn more.
-
-<!--
-## Note for ROS users
-
-The provide **CMakeLists.txt** should find the necessary dependencies even
-when compiled with `catkin` or `ament`.
-
-Anyway, remember that the primary goal of this repo is **not** to
-support the development of ROS specific plugins.
-
-You can find those in the repository
-[PlotJuggler/plotjuggler-ros-plugins](https://github.com/PlotJuggler/plotjuggler-ros-plugins)
--->
+PlotJugglerがプラグインを読み込まない場合は、
+ビルドしたプラグインを `plotjuggler` 実行ファイルと同じディレクトリに置くか、
+App -> Preferences... からプラグインのディレクトリを指定してください。
