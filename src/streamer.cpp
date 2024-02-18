@@ -20,9 +20,12 @@ bool DataStreamWebCFace::start(QStringList *) {
         auto initial_time = std::chrono::high_resolution_clock::now();
         m.onValueEntry().appendListener([this, initial_time](
                                             const webcface::Value &v) {
-            auto &plot = dataMap()
-                             .addNumeric(v.member().name() + "/" + v.name())
-                             ->second;
+            std::string v_name = v.name();
+            while (v_name.find(".") != std::string::npos) {
+                v_name[v_name.find(".")] = '/';
+            }
+            auto &plot =
+                dataMap().addNumeric(v.member().name() + "/" + v_name)->second;
             v.appendListener([this, &plot,
                               initial_time](const webcface::Value &v) {
                 plot.pushBack(
@@ -35,9 +38,13 @@ bool DataStreamWebCFace::start(QStringList *) {
         });
         m.onTextEntry().appendListener([this,
                                         initial_time](const webcface::Text &t) {
+            std::string v_name = t.name();
+            while (v_name.find(".") != std::string::npos) {
+                v_name[v_name.find(".")] = '/';
+            }
             auto &series =
                 dataMap()
-                    .addStringSeries(t.member().name() + "/" + t.name())
+                    .addStringSeries(t.member().name() + "/" + v_name)
                     ->second;
             t.appendListener([this, &series,
                               initial_time](const webcface::Text &t) {
